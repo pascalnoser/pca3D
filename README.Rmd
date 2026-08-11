@@ -1,0 +1,85 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# pca3D
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/pascalnoser/pca3D/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pascalnoser/pca3D/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+pca3D creates 3D-style PCA scatter plots with ggplot2 from a `prcomp` object,
+including static views (`plot_pca3d()`) and rotating GIF animations of a full
+360 degree spin (`animate_pca3d()`). Points can be coloured by continuous or
+categorical sample metadata, any three PC dimensions can be selected, and
+variance explained can be annotated automatically.
+
+## Installation
+
+You can install the development version of pca3D from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("pascalnoser/pca3D")
+```
+
+## Example
+
+```{r example}
+library(pca3D)
+
+pca <- prcomp(iris[, 1:4], scale. = TRUE)
+
+plot_pca3d(pca, metadata = iris, color_by = Species)
+```
+
+Because the returned object is a regular `ggplot`, you can customise it
+further, e.g. by adding your own colour scale or theme:
+
+```{r example-custom}
+library(ggplot2)
+
+plot_pca3d(pca, metadata = iris, color_by = Species) +
+  scale_color_brewer(palette = "Dark2") +
+  theme_bw()
+```
+
+Set `axes = "gizmo"` (or `"full"`) to show which direction each PC points,
+rotating along with the cloud:
+
+```{r example-gizmo}
+plot_pca3d(pca, metadata = iris, color_by = Species, axes = "gizmo")
+```
+
+To see the same point cloud from every angle, save a rotating GIF with
+`animate_pca3d()`:
+
+```{r example-gif, eval = FALSE}
+animate_pca3d(
+  pca,
+  metadata = iris,
+  color_by = Species,
+  axes = "gizmo",
+  file = "man/figures/README-pca3d.gif"
+)
+```
+
+![](man/figures/README-pca3d.gif)
+
+Colouring by a continuous variable and picking a different set of PCs works
+the same way:
+
+```{r example-continuous}
+plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length)
+```

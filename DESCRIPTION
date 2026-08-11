@@ -1,13 +1,30 @@
 Package: pca3D
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Rotating 3D-Style PCA Plots with ggplot2
+Version: 0.1.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Pascal", "Noser", , "pascalnoser@users.noreply.github.com", role = c("aut", "cre"))
+Description: Create 3D-style PCA scatter plots from 'prcomp' objects using
+    'ggplot2', including static views and rotating GIF animations of a full
+    360 degree spin. Supports colouring by continuous or categorical sample
+    metadata, choice of principal component dimensions, and annotation of
+    variance explained.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 URL: https://github.com/pascalnoser/pca3D
 BugReports: https://github.com/pascalnoser/pca3D/issues
+Imports: 
+    cli,
+    gganimate,
+    ggplot2,
+    gifski,
+    rlang,
+    stats
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
+VignetteBuilder: knitr

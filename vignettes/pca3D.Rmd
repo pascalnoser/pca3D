@@ -1,0 +1,143 @@
+---
+title: "pca3D"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pca3D}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 6
+)
+```
+
+```{r setup}
+library(pca3D)
+library(ggplot2)
+```
+
+pca3D creates 3D-style PCA scatter plots from a `prcomp` object using
+ggplot2, plus rotating GIF animations of a full 360 degree spin. Because
+ggplot2 has no native 3D coordinate system, pca3D simulates one: it applies
+a 3D rotation to the three selected PC scores and projects the result onto
+2D, optionally scaling point size and opacity by depth so closer points
+stand out (a "depth cue"). A single such projection is a static plot; many
+projections at different azimuth angles, stitched together, form the
+rotating GIF.
+
+## Fitting a PCA
+
+We'll use the classic `iris` dataset, colouring points by species (a
+categorical variable) and by `Sepal.Length` (a continuous variable).
+
+```{r fit-pca}
+pca <- prcomp(iris[, 1:4], scale. = TRUE)
+```
+
+## A static plot
+
+`plot_pca3d()` returns a single view of the point cloud, at a given azimuth
+(`theta`) and elevation (`phi`) angle:
+
+```{r static-plot}
+plot_pca3d(pca, metadata = iris, color_by = Species)
+```
+
+By default, the first three principal components are used, and a caption
+lists the percent variance explained by each. Once the cloud is rotated,
+the 2D x/y axes are a blend of the selected PCs rather than any single one,
+so axis titles are intentionally omitted in favour of this caption.
+
+### Choosing PC dimensions
+
+Use `dims` to plot a different set of three components:
+
+```{r dims}
+plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Species)
+```
+
+### Colouring by a continuous variable
+
+`color_by` works the same way for numeric columns:
+
+```{r continuous}
+plot_pca3d(pca, metadata = iris, color_by = Sepal.Length)
+```
+
+### Customising the plot
+
+`plot_pca3d()` returns a regular `ggplot` object and applies no colour
+scale of its own, so you're free to add your own scale, theme, or other
+layers:
+
+```{r customise}
+plot_pca3d(pca, metadata = iris, color_by = Species) +
+  scale_color_brewer(palette = "Dark2") +
+  theme_bw()
+```
+
+### Viewing angle and depth cueing
+
+`theta` and `phi` control the azimuth and elevation of the view, and
+`depth_cue` toggles the size/opacity effect used to suggest depth:
+
+```{r angle}
+plot_pca3d(pca, metadata = iris, color_by = Species, theta = 120, phi = 10)
+```
+
+```{r no-depth-cue}
+plot_pca3d(pca, metadata = iris, color_by = Species, depth_cue = FALSE)
+```
+
+### Showing which way each axis points
+
+Once the cloud is rotated, it's easy to lose track of which direction each
+PC points. Set `axes = "full"` to draw an arrow through the point cloud
+along each rotated PC direction, labelled at the tip:
+
+```{r axes-full}
+plot_pca3d(pca, metadata = iris, color_by = Species, axes = "full")
+```
+
+Or `axes = "gizmo"` for a small triad of arrows tucked in a corner,
+independent of the data's scale -- useful when full-length arrows would be
+too cluttered, especially once the plot is animated:
+
+```{r axes-gizmo}
+plot_pca3d(pca, metadata = iris, color_by = Species, axes = "gizmo")
+```
+
+Both styles rotate together with the point cloud (in `animate_pca3d()`
+too), so they always reflect the current viewing angle. `axis_color`
+controls their (fixed, non-data-mapped) colour.
+
+## Animating a full rotation
+
+`animate_pca3d()` renders many views spanning a full 360 degree rotation
+and saves them as a looping GIF. It takes largely the same arguments as
+`plot_pca3d()` (minus `theta`, since every angle is rendered), plus
+`n_frames`, `fps`, and output dimensions:
+
+```{r animate, eval = FALSE}
+animate_pca3d(
+  pca,
+  metadata = iris,
+  color_by = Species,
+  axes = "gizmo",
+  n_frames = 36,
+  fps = 10,
+  file = "pca3d.gif"
+)
+```
+
+## Metadata alignment
+
+When `metadata` and the data used to fit `pca` both have meaningful row
+names, pca3D matches rows by name so metadata doesn't need to be in the
+same order as the original data. If either is missing row names, rows are
+assumed to already be in the same order.
