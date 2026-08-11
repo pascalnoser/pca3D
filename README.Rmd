@@ -53,18 +53,18 @@ plot_pca3d(pca, metadata = iris, color_by = Species) +
   scale_color_brewer(palette = "Dark2")
 ```
 
-Set `axes = "gizmo"` (or `"full"`) to show which direction each PC points,
+Set `axes = "full"` (or `"gizmo"`) to show which direction each PC points,
 rotating along with the cloud:
 
-```{r example-gizmo}
-plot_pca3d(pca, metadata = iris, color_by = Species, axes = "gizmo")
+```{r example-full}
+plot_pca3d(pca, metadata = iris, color_by = Species, axes = "full")
 ```
 
-Colouring by a continuous variable and picking a different set of PCs works
-the same way:
+Colouring by a continuous variable, picking a different set of PCs, and changing the viewing angle
+works the same way:
 
 ```{r example-continuous}
-plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length)
+plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length, theta = 45, phi = 30)
 ```
 
 To see the same point cloud from every angle, save a rotating GIF with
