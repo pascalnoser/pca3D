@@ -19,7 +19,8 @@ animate_pca3d(
   width = 600,
   height = 600,
   axes = c("none", "full", "gizmo"),
-  axis_color = "grey40"
+  axis_color = "grey40",
+  color_scale = NULL
 )
 }
 \arguments{
@@ -66,6 +67,13 @@ independent of data scale, like a small rotating compass).}
 
 \item{axis_color}{Colour used for the axis arrows/labels when \code{axes != "none"}. Default \code{"grey40"}. This is a fixed colour, not mapped to
 data, so it won't interfere with \code{color_by}'s colour scale.}
+
+\item{color_scale}{Optional \code{ggplot2} colour scale to apply to
+\code{color_by}, e.g. \code{scale_color_viridis_c()} or
+\code{scale_color_brewer(palette = "Set1")}. Because the returned/rendered
+result of \code{\link[=animate_pca3d]{animate_pca3d()}} is a rendered GIF rather than a \code{ggplot}
+object, you can't customise the colour scale by adding to it
+afterwards (as you can with \code{\link[=plot_pca3d]{plot_pca3d()}}) -- pass it here instead.}
 }
 \value{
 The path to the saved GIF file, invisibly.
@@ -85,6 +93,16 @@ animate_pca3d(
   color_by = Species,
   n_frames = 12,
   file = tempfile(fileext = ".gif")
+)
+
+# Customise the colour scale
+animate_pca3d(
+  pca,
+  metadata = iris,
+  color_by = Species,
+  n_frames = 12,
+  file = tempfile(fileext = ".gif"),
+  color_scale = ggplot2::scale_color_brewer(palette = "Set1")
 )
 }
 }

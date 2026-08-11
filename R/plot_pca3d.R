@@ -39,6 +39,12 @@
 #' @param axis_color Colour used for the axis arrows/labels when `axes !=
 #'   "none"`. Default `"grey40"`. This is a fixed colour, not mapped to
 #'   data, so it won't interfere with `color_by`'s colour scale.
+#' @param color_scale Optional `ggplot2` colour scale to apply to
+#'   `color_by`, e.g. `scale_color_viridis_c()` or
+#'   `scale_color_brewer(palette = "Set1")`. Since [plot_pca3d()] returns a
+#'   plain `ggplot` object, this is equivalent to adding the scale yourself
+#'   with `+`, but is provided for symmetry with [animate_pca3d()], where a
+#'   scale can't be added after the fact.
 #'
 #' @return A `ggplot` object.
 #' @export
@@ -58,7 +64,8 @@ plot_pca3d <- function(
   depth_cue = TRUE,
   point_size = 3,
   axes = c("none", "full", "gizmo"),
-  axis_color = "grey40"
+  axis_color = "grey40",
+  color_scale = NULL
 ) {
   axes <- match.arg(axes)
   color_quo <- rlang::enquo(color_by)
@@ -67,6 +74,8 @@ plot_pca3d <- function(
   } else {
     rlang::as_name(color_quo)
   }
+
+  pca3d_validate_color_scale(color_scale, color_name)
 
   prepared <- pca3d_prepare_data(pca, dims, metadata, color_name)
   rp <- rotate_project(prepared$coords, theta = theta, phi = phi)
@@ -89,7 +98,7 @@ plot_pca3d <- function(
     NULL
   }
 
-  .pca3d_ggplot(
+  p <- .pca3d_ggplot(
     rp,
     color_by = color_name,
     caption = caption,
@@ -100,4 +109,10 @@ plot_pca3d <- function(
     axis_color = axis_color,
     axis_alpha = if (axes == "full") 0.6 else 1
   )
+
+  if (!is.null(color_scale)) {
+    p <- p + color_scale
+  }
+
+  p
 }

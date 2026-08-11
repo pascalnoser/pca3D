@@ -15,7 +15,8 @@ plot_pca3d(
   depth_cue = TRUE,
   point_size = 3,
   axes = c("none", "full", "gizmo"),
-  axis_color = "grey40"
+  axis_color = "grey40",
+  color_scale = NULL
 )
 }
 \arguments{
@@ -56,6 +57,13 @@ rotating compass).}
 
 \item{axis_color}{Colour used for the axis arrows/labels when \code{axes != "none"}. Default \code{"grey40"}. This is a fixed colour, not mapped to
 data, so it won't interfere with \code{color_by}'s colour scale.}
+
+\item{color_scale}{Optional \code{ggplot2} colour scale to apply to
+\code{color_by}, e.g. \code{scale_color_viridis_c()} or
+\code{scale_color_brewer(palette = "Set1")}. Since \code{\link[=plot_pca3d]{plot_pca3d()}} returns a
+plain \code{ggplot} object, this is equivalent to adding the scale yourself
+with \code{+}, but is provided for symmetry with \code{\link[=animate_pca3d]{animate_pca3d()}}, where a
+scale can't be added after the fact.}
 }
 \value{
 A \code{ggplot} object.

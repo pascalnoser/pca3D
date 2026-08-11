@@ -135,6 +135,27 @@ animate_pca3d(
 )
 ```
 
+### Customising the colour scale
+
+Unlike `plot_pca3d()`, `animate_pca3d()` doesn't return a `ggplot` object
+you can add a scale to afterwards -- it renders and saves the GIF
+directly. To use a custom colour scale, build it first with any
+`scale_color_*()`/`scale_colour_*()` function and pass it via
+`color_scale`:
+
+```{r animate-scale, eval = FALSE}
+animate_pca3d(
+  pca,
+  metadata = iris,
+  color_by = Species,
+  axes = "gizmo",
+  color_scale = scale_color_brewer(palette = "Dark2"),
+  n_frames = 36,
+  fps = 10,
+  file = "pca3d.gif"
+)
+```
+
 ## Metadata alignment
 
 When `metadata` and the data used to fit `pca` both have meaningful row

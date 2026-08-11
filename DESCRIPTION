@@ -1,6 +1,6 @@
 Package: pca3D
 Title: Rotating 3D-Style PCA Plots with ggplot2
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Pascal", "Noser", , "pascalnoser@users.noreply.github.com", role = c("aut", "cre"))
 Description: Create 3D-style PCA scatter plots from 'prcomp' objects using

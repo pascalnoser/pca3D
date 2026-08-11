@@ -19,6 +19,12 @@
 #' @param axis_color Colour used for the axis arrows/labels when `axes !=
 #'   "none"`. Default `"grey40"`. This is a fixed colour, not mapped to
 #'   data, so it won't interfere with `color_by`'s colour scale.
+#' @param color_scale Optional `ggplot2` colour scale to apply to
+#'   `color_by`, e.g. `scale_color_viridis_c()` or
+#'   `scale_color_brewer(palette = "Set1")`. Because the returned/rendered
+#'   result of [animate_pca3d()] is a rendered GIF rather than a `ggplot`
+#'   object, you can't customise the colour scale by adding to it
+#'   afterwards (as you can with [plot_pca3d()]) -- pass it here instead.
 #'
 #' @return The path to the saved GIF file, invisibly.
 #' @export
@@ -32,6 +38,16 @@
 #'   color_by = Species,
 #'   n_frames = 12,
 #'   file = tempfile(fileext = ".gif")
+#' )
+#'
+#' # Customise the colour scale
+#' animate_pca3d(
+#'   pca,
+#'   metadata = iris,
+#'   color_by = Species,
+#'   n_frames = 12,
+#'   file = tempfile(fileext = ".gif"),
+#'   color_scale = ggplot2::scale_color_brewer(palette = "Set1")
 #' )
 #' }
 animate_pca3d <- function(
@@ -49,7 +65,8 @@ animate_pca3d <- function(
   width = 600,
   height = 600,
   axes = c("none", "full", "gizmo"),
-  axis_color = "grey40"
+  axis_color = "grey40",
+  color_scale = NULL
 ) {
   axes <- match.arg(axes)
   color_quo <- rlang::enquo(color_by)
@@ -58,6 +75,8 @@ animate_pca3d <- function(
   } else {
     rlang::as_name(color_quo)
   }
+
+  pca3d_validate_color_scale(color_scale, color_name)
 
   prepared <- pca3d_prepare_data(pca, dims, metadata, color_name)
 
@@ -111,8 +130,13 @@ animate_pca3d <- function(
     axis_labels = axis_labels,
     axis_color = axis_color,
     axis_alpha = if (axes == "full") 0.6 else 1
-  ) +
-    gganimate::transition_manual(frame)
+  )
+
+  if (!is.null(color_scale)) {
+    p <- p + color_scale
+  }
+
+  p <- p + gganimate::transition_manual(frame)
 
   anim <- gganimate::animate(
     p,

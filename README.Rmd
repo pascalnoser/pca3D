@@ -21,8 +21,7 @@ knitr::opts_chunk$set(
 
 pca3D creates 3D-style PCA scatter plots with ggplot2 from a `prcomp` object,
 including static views (`plot_pca3d()`) and rotating GIF animations of a full
-360 degree spin (`animate_pca3d()`). Points can be coloured by continuous or
-categorical sample metadata, any three PC dimensions can be selected, and
+360 degree spin (`animate_pca3d()`). Points can be coloured by metadata columns, any three PC dimensions can be selected, and
 variance explained can be annotated automatically.
 
 ## Installation
@@ -45,14 +44,13 @@ plot_pca3d(pca, metadata = iris, color_by = Species)
 ```
 
 Because the returned object is a regular `ggplot`, you can customise it
-further, e.g. by adding your own colour scale or theme:
+further, e.g. by adding your own colour scale:
 
 ```{r example-custom}
 library(ggplot2)
 
 plot_pca3d(pca, metadata = iris, color_by = Species) +
-  scale_color_brewer(palette = "Dark2") +
-  theme_bw()
+  scale_color_brewer(palette = "Dark2")
 ```
 
 Set `axes = "gizmo"` (or `"full"`) to show which direction each PC points,
@@ -62,8 +60,17 @@ rotating along with the cloud:
 plot_pca3d(pca, metadata = iris, color_by = Species, axes = "gizmo")
 ```
 
+Colouring by a continuous variable and picking a different set of PCs works
+the same way:
+
+```{r example-continuous}
+plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length)
+```
+
 To see the same point cloud from every angle, save a rotating GIF with
-`animate_pca3d()`:
+`animate_pca3d()`. Since the result is a rendered GIF rather than a
+`ggplot` object, you can't customise the colour scale by adding to it
+afterwards -- instead, build the scale first and pass it via `color_scale`:
 
 ```{r example-gif, eval = FALSE}
 animate_pca3d(
@@ -71,15 +78,9 @@ animate_pca3d(
   metadata = iris,
   color_by = Species,
   axes = "gizmo",
+  color_scale = scale_color_brewer(palette = "Dark2"),
   file = "man/figures/README-pca3d.gif"
 )
 ```
 
 ![](man/figures/README-pca3d.gif)
-
-Colouring by a continuous variable and picking a different set of PCs works
-the same way:
-
-```{r example-continuous}
-plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length)
-```

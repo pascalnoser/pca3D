@@ -2,6 +2,28 @@
 #' @importFrom gifski gifski
 NULL
 
+# Shared validation for the `color_scale` argument of plot_pca3d() and
+# animate_pca3d(): must be a ggplot2 scale (e.g. the result of calling
+# scale_color_*()), and only makes sense when color_by is also supplied.
+pca3d_validate_color_scale <- function(color_scale, color_name) {
+  if (is.null(color_scale)) {
+    return(invisible(NULL))
+  }
+  if (!inherits(color_scale, "Scale")) {
+    cli::cli_abort(
+      "{.arg color_scale} must be a ggplot2 scale, e.g. the result of
+       calling {.fn scale_color_viridis_c} or {.fn scale_color_brewer}."
+    )
+  }
+  if (is.null(color_name)) {
+    cli::cli_warn(
+      "{.arg color_scale} was supplied but {.arg color_by} is {.code NULL};
+       the scale will have no effect."
+    )
+  }
+  invisible(NULL)
+}
+
 # `frame` is referenced via NSE in gganimate::transition_manual(frame)
 utils::globalVariables("frame")
 
