@@ -77,8 +77,7 @@ layers:
 
 ```{r customise}
 plot_pca3d(pca, metadata = iris, color_by = Species) +
-  scale_color_brewer(palette = "Dark2") +
-  theme_bw()
+  scale_color_brewer(palette = "Dark2")
 ```
 
 ### Viewing angle and depth cueing

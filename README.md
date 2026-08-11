@@ -26,51 +26,19 @@ pak::pak("pascalnoser/pca3D")
 
 ## Example
 
+A static view with `plot_pca3d()`:
+
 ``` r
 library(pca3D)
 
 pca <- prcomp(iris[, 1:4], scale. = TRUE)
 
-plot_pca3d(pca, metadata = iris, color_by = Species)
+plot_pca3d(pca, metadata = iris, color_by = Species, axes = "gizmo")
 ```
 
 <img src="man/figures/README-example-1.png" alt="" width="100%" />
 
-Because the returned object is a regular `ggplot`, you can customise it
-further, e.g. by adding your own colour scale:
-
-``` r
-library(ggplot2)
-
-plot_pca3d(pca, metadata = iris, color_by = Species) +
-  scale_color_brewer(palette = "Dark2")
-```
-
-<img src="man/figures/README-example-custom-1.png" alt="" width="100%" />
-
-Set `axes = "full"` (or `"gizmo"`) to show which direction each PC
-points, rotating along with the cloud:
-
-``` r
-plot_pca3d(pca, metadata = iris, color_by = Species, axes = "full")
-```
-
-<img src="man/figures/README-example-full-1.png" alt="" width="100%" />
-
-Colouring by a continuous variable, picking a different set of PCs, and
-changing the viewing angle works the same way:
-
-``` r
-plot_pca3d(pca, dims = c(1, 2, 4), metadata = iris, color_by = Sepal.Length, theta = 45, phi = 30)
-```
-
-<img src="man/figures/README-example-continuous-1.png" alt="" width="100%" />
-
-To see the same point cloud from every angle, save a rotating GIF with
-`animate_pca3d()`. Since the result is a rendered GIF rather than a
-`ggplot` object, you can’t customise the colour scale by adding to it
-afterwards – instead, build the scale first and pass it via
-`color_scale`:
+And a full rotating GIF with `animate_pca3d()`:
 
 ``` r
 animate_pca3d(
@@ -78,9 +46,12 @@ animate_pca3d(
   metadata = iris,
   color_by = Species,
   axes = "gizmo",
-  color_scale = scale_color_brewer(palette = "Dark2"),
   file = "man/figures/README-pca3d.gif"
 )
 ```
 
 ![](man/figures/README-pca3d.gif)
+
+For more on customising colours, axes, viewing angle, and dimension
+choice, see `vignette("pca3D")` or the function documentation
+(`?plot_pca3d`, `?animate_pca3d`).
