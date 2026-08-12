@@ -8,3 +8,5 @@ inst/doc
 /*.gif
 
 /.quarto/
+conversation-export.json
+PositAssistant_conversations/

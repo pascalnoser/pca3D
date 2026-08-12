@@ -6,8 +6,8 @@
 #' also what each frame here looks like.
 #'
 #' @inheritParams plot_pca3d
-#' @param n_frames Number of frames in the full 360 degree rotation. Default `36`.
-#' @param fps Frames per second in the output GIF. Default `10`.
+#' @param n_frames Number of frames in the full 360 degree rotation. Default `90`.
+#' @param fps Frames per second in the output GIF. Default `24`.
 #' @param file Path to save the GIF file to. Default `"pca3d.gif"`.
 #' @param width,height Pixel dimensions of the output GIF. Default `600` each.
 #' @param axes Draw an indicator of which direction each PC axis points,

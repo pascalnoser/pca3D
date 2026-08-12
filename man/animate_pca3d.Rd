@@ -13,8 +13,8 @@ animate_pca3d(
   phi = 20,
   depth_cue = TRUE,
   point_size = 3,
-  n_frames = 36,
-  fps = 10,
+  n_frames = 90,
+  fps = 24,
   file = "pca3d.gif",
   width = 600,
   height = 600,
@@ -50,9 +50,9 @@ viewer are drawn larger and more opaque.}
 
 \item{point_size}{Base point size. Default \code{3}.}
 
-\item{n_frames}{Number of frames in the full 360 degree rotation. Default \code{36}.}
+\item{n_frames}{Number of frames in the full 360 degree rotation. Default \code{90}.}
 
-\item{fps}{Frames per second in the output GIF. Default \code{10}.}
+\item{fps}{Frames per second in the output GIF. Default \code{24}.}
 
 \item{file}{Path to save the GIF file to. Default \code{"pca3d.gif"}.}
 
